@@ -1,0 +1,228 @@
+{
+  "locale": "en",
+  "localeName": "English",
+  "person": {
+    "name": "Seilbek Skindirov",
+    "title": "Software Developer · Full-Stack Engineer",
+    "location": "Kazakhstan",
+    "tagline": "17+ years across the stack — from GPS, GSM and VoIP gateways early on to CRM/ERP integrations and payments more recently.",
+    "birthYear": 1986,
+    "experience": "17+ years",
+    "githubUser": "prorochestvo"
+  },
+  "about": [
+    "Full-stack and backend engineer with 17+ years building backends, integrations and full-stack products.",
+    "The work has ranged from web platforms with payment and banking integrations and, recently, CRM/ERP synchronization, to GPS/GSM/VoIP gateways and access-control device software earlier in my career.",
+    "Comfortable across the stack — backend services, integration entry points, data-synchronization pipelines, and migrating monoliths to microservices and Docker."
+  ],
+  "experience": [
+    {
+      "company": "Yoxel",
+      "role": "Full-Stack Engineer",
+      "period": "Apr 2021 — Present",
+      "location": "Tahoma, United States",
+      "arrangement": "Remote · Full-time",
+      "summary": "Tools for automation and synchronization of business workflows.",
+      "highlights": [
+        "Designed and implemented unified integration entry points for CRM/ERP systems including Repfabric, Salesforce, Oasis, Fishbowl, AutoQuotes and QuickBooks.",
+        "Maintained and enhanced MS Outlook and Gmail add-ons/extensions to meet business requirements.",
+        "Built data-synchronization pipelines for bidirectional dataset transfer between third-party systems.",
+        "Expanded unit and integration test coverage across multiple services."
+      ],
+      "stack": ["Scala", "ZIO", "Dart", "Flutter", "PostgreSQL", "Redis"],
+      "current": true,
+      "start": "2021-04",
+      "end": ""
+    },
+    {
+      "company": "iSate LTD",
+      "role": "Backend Engineer",
+      "period": "Jul 2020 — Mar 2021",
+      "location": "Astana, Kazakhstan",
+      "arrangement": "Hybrid · Full-time",
+      "summary": "Software development and document-automation services.",
+      "highlights": [
+        "Maintained and adapted a legacy system to evolving business requirements.",
+        "Contributed to the architecture and design of new backend services.",
+        "Proposed and implemented CI/CD pipelines using TeamCity."
+      ],
+      "stack": ["C#", "PostgreSQL", "TeamCity"],
+      "current": false,
+      "start": "2020-07",
+      "end": "2021-03"
+    },
+    {
+      "company": "5Plus Information Technologies LLP",
+      "role": "Full-Stack Engineer",
+      "period": "Jul 2013 — Jun 2020",
+      "location": "Astana, Kazakhstan",
+      "arrangement": "On-site · Full-time",
+      "summary": "National test-preparation platform for high-school graduates in Kazakhstan.",
+      "highlights": [
+        "Led frontend and backend development, including a full migration from desktop to web application.",
+        "Integrated payment systems and banking APIs into the platform.",
+        "Migrated the platform to microservices and Dockerized the production infrastructure.",
+        "Designed and maintained internal and external task-management workflows."
+      ],
+      "stack": ["PHP", "Go", "Dart", "C#", "PostgreSQL", "Redis", "Docker"],
+      "current": false,
+      "start": "2013-07",
+      "end": "2020-06"
+    },
+    {
+      "company": "Vienna LTD",
+      "role": "Contract Developer",
+      "period": "Jun 2017 — Jan 2020",
+      "location": "Astana, Kazakhstan",
+      "arrangement": "Remote · Project-based",
+      "summary": "Healthcare software (alongside a full-time role).",
+      "highlights": [
+        "Built a web portal for medical staff to manage patient-related workflows.",
+        "Created several internal tools to address specific business requirements."
+      ],
+      "stack": ["Dart", "Angular", "C++"],
+      "current": false,
+      "start": "2017-06",
+      "end": "2020-01"
+    },
+    {
+      "company": "Space Management LTD",
+      "role": "Contract Developer",
+      "period": "Jul 2014 — Feb 2015",
+      "location": "Astana, Kazakhstan",
+      "arrangement": "Project-based",
+      "summary": "Access-control hardware integration (alongside a full-time role).",
+      "highlights": [
+        "Established communication between turnstile access-control devices and a backend server."
+      ],
+      "stack": ["C++"],
+      "current": false,
+      "start": "2014-07",
+      "end": "2015-02"
+    },
+    {
+      "company": "Monitoring Plus LTD",
+      "role": "Contract Developer",
+      "period": "Feb 2013 — May 2013",
+      "location": "Kostanay, Kazakhstan",
+      "arrangement": "Project-based",
+      "summary": "Vehicle GPS-tracking software.",
+      "highlights": [
+        "Consulted on GPS device integration during development of an internal tracking service.",
+        "Developed tools to automate internal workflows."
+      ],
+      "stack": ["C++", "Delphi"],
+      "current": false,
+      "start": "2013-02",
+      "end": "2013-05"
+    },
+    {
+      "company": "390001 LTD",
+      "role": "Full-Stack Engineer",
+      "period": "Feb 2009 — Apr 2013",
+      "location": "Kostanay, Kazakhstan",
+      "arrangement": "Full-time",
+      "summary": "Taxi dispatch and logistics service.",
+      "highlights": [
+        "Maintained and extended a legacy dispatch-management system.",
+        "Created accounting tools to address business reporting requirements.",
+        "Implemented GPS integration, including custom server/client development and in-vehicle device setup.",
+        "Designed and implemented a GSM gateway using an internal modem via AT commands.",
+        "Designed and implemented a VoIP gateway based on Asterisk and the SIP protocol."
+      ],
+      "stack": ["Delphi", "C++", "MySQL"],
+      "current": false,
+      "start": "2009-02",
+      "end": "2013-04"
+    },
+    {
+      "company": "Regional Government Department",
+      "role": "Contract Developer",
+      "period": "Aug 2010 — Feb 2013",
+      "location": "Kostanay, Kazakhstan",
+      "arrangement": "Project-based",
+      "summary": "Government department of the Kostanay region (alongside a full-time role).",
+      "highlights": [
+        "Implemented a real-time internal chat application."
+      ],
+      "stack": ["Delphi", "C++"],
+      "current": false,
+      "start": "2010-08",
+      "end": "2013-02"
+    }
+  ],
+  "projects": [
+    {
+      "name": "fx_rate_monitor",
+      "repo": "github.com/prorochestvo/fx-rate-monitor",
+      "url": "https://github.com/prorochestvo/fx-rate-monitor",
+      "stack": ["Go", "SQLite", "Telegram Bot API", "Mini App"],
+      "summary": "Production Telegram bot tracking FX and metal rates across national banks.",
+      "highlights": [
+        "Ticker-driven scheduled collection with graceful shutdown via context.",
+        "Sparkline-chart Mini App: per-row auto-fit Y-scale, FNV-1a color hashing, metal/currency classification.",
+        "SQLite persistence and a message-rendering pipeline."
+      ]
+    },
+    {
+      "name": "vpntunnel",
+      "repo": "github.com/prorochestvo/vpntunnel",
+      "url": "",
+      "stack": ["Go", "WireGuard (userspace)", "gVisor netstack"],
+      "summary": "Forward HTTP proxy routing all egress through a bearer-authenticated WireGuard tunnel — no root, no kernel modules.",
+      "highlights": [
+        "Userspace networking via gVisor netstack; HTTP forward and HTTPS CONNECT in one static binary.",
+        "Constant-time token authentication."
+      ]
+    },
+    {
+      "name": "NeuroCompass",
+      "repo": "commercial project · NDA",
+      "url": "",
+      "stack": ["Go", "SQLite", "vanilla JS", "Telegram Mini App"],
+      "summary": "Commissioned Telegram Mini App for cognitive self-analysis, delivered to production.",
+      "highlights": [
+        "Full Go backend: SQLite storage and OpenRouter LLM integration.",
+        "Seven-screen UI."
+      ]
+    },
+    {
+      "name": "LogInjector",
+      "repo": "github.com/prorochestvo/loginjector",
+      "url": "https://github.com/prorochestvo/loginjector",
+      "stack": ["Go", "stdlib core", "HTTP middleware"],
+      "summary": "Concurrent-safe structured logging library: fan-out to multiple sinks with level-targeted hooks.",
+      "highlights": [
+        "Pluggable handlers — console, rotating file, Telegram — composed as io.Writer sinks.",
+        "HTTP middleware preserving Flusher/Hijacker/Pusher; auto-redacts authorization headers."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "year": "2008",
+      "institution": "Z. Aldamzhar Kostanay Social-Technical University",
+      "field": "Computer Engineering and Software",
+      "degree": "Bachelor"
+    }
+  ],
+  "skills": [
+    {"name": "Languages", "items": ["Go", "Scala", "PHP", "Dart"]},
+    {"name": "Frameworks", "items": ["Flutter", "Angular"]},
+    {"name": "Data", "items": ["PostgreSQL", "MySQL", "Redis"]},
+    {"name": "Infra & Tools", "items": ["Docker", "Git", "JIRA", "Nginx", "GitHub Actions"]},
+    {"name": "Domains", "items": ["CRM/ERP integration", "Payments & banking APIs", "Microservices", "GPS / GSM / VoIP", "Device communication"]}
+  ],
+  "languages": [
+    {"name": "Russian", "level": "Native"},
+    {"name": "English", "level": "Elementary (A2)"}
+  ],
+  "relocation": ["Great Britain", "Germany", "Canada", "Cyprus", "UAE", "Panama", "USA"],
+  "contacts": [
+    {"label": "Location", "value": "Kazakhstan (open to relocation)", "url": ""},
+    {"label": "Email", "value": "SeilbekSkindirov@gmail.com", "url": "mailto:SeilbekSkindirov@gmail.com"},
+    {"label": "GitHub", "value": "github.com/prorochestvo", "url": "https://github.com/prorochestvo"},
+    {"label": "Telegram", "value": "@prorochestvo", "url": "https://t.me/prorochestvo"},
+    {"label": "LinkedIn", "value": "linkedin.com/in/prorochestvo", "url": "https://www.linkedin.com/in/prorochestvo/"}
+  ]
+}

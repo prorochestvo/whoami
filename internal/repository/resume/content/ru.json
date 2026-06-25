@@ -1,0 +1,228 @@
+{
+  "locale": "ru",
+  "localeName": "Русский",
+  "person": {
+    "name": "Сейльбек Скиндиров",
+    "title": "Разработчик ПО · Full-Stack инженер",
+    "location": "Казахстан",
+    "tagline": "17+ лет по всему стеку — от GPS-, GSM- и VoIP-шлюзов в начале пути до интеграций CRM/ERP и платежей в последние годы.",
+    "birthYear": 1986,
+    "experience": "17+ лет",
+    "githubUser": "prorochestvo"
+  },
+  "about": [
+    "Full-stack и backend инженер: 17+ лет создаю бэкенды, интеграции и full-stack продукты.",
+    "Работа охватывала веб-платформы с платёжными и банковскими интеграциями и, в последнее время, синхронизацию CRM/ERP, а в начале карьеры — GPS/GSM/VoIP-шлюзы и ПО для устройств контроля доступа.",
+    "Уверенно работаю по всему стеку — бэкенд-сервисы, точки входа для интеграций, пайплайны синхронизации данных, перенос монолитов в микросервисы и Docker."
+  ],
+  "experience": [
+    {
+      "company": "Yoxel",
+      "role": "Full-Stack инженер",
+      "period": "Апр 2021 — наст. время",
+      "location": "Тахома, США",
+      "arrangement": "Удалённо · Полная занятость",
+      "summary": "Инструменты для автоматизации и синхронизации бизнес-процессов.",
+      "highlights": [
+        "Спроектировал и реализовал единые точки входа для интеграции с CRM/ERP-системами: Repfabric, Salesforce, Oasis, Fishbowl, AutoQuotes и QuickBooks.",
+        "Поддерживал и развивал надстройки и расширения для MS Outlook и Gmail под требования бизнеса.",
+        "Построил пайплайны двусторонней синхронизации данных между сторонними системами.",
+        "Расширил покрытие модульными и интеграционными тестами в нескольких сервисах."
+      ],
+      "stack": ["Scala", "ZIO", "Dart", "Flutter", "PostgreSQL", "Redis"],
+      "current": true,
+      "start": "2021-04",
+      "end": ""
+    },
+    {
+      "company": "iSate LTD",
+      "role": "Backend инженер",
+      "period": "Июл 2020 — Мар 2021",
+      "location": "Астана, Казахстан",
+      "arrangement": "Гибрид · Полная занятость",
+      "summary": "Разработка ПО и сервисы автоматизации документооборота.",
+      "highlights": [
+        "Поддерживал и адаптировал легаси-систему под меняющиеся требования бизнеса.",
+        "Участвовал в архитектуре и проектировании новых бэкенд-сервисов.",
+        "Предложил и внедрил CI/CD-пайплайны на TeamCity."
+      ],
+      "stack": ["C#", "PostgreSQL", "TeamCity"],
+      "current": false,
+      "start": "2020-07",
+      "end": "2021-03"
+    },
+    {
+      "company": "5Plus Information Technologies LLP",
+      "role": "Full-Stack инженер",
+      "period": "Июл 2013 — Июн 2020",
+      "location": "Астана, Казахстан",
+      "arrangement": "Офис · Полная занятость",
+      "summary": "Национальная платформа подготовки к тестам для выпускников школ Казахстана.",
+      "highlights": [
+        "Вёл разработку фронтенда и бэкенда, включая полный переход с десктопа на веб-приложение.",
+        "Интегрировал платёжные системы и банковские API в платформу.",
+        "Перевёл платформу на микросервисы и контейнеризировал продакшн-инфраструктуру в Docker.",
+        "Спроектировал и поддерживал внутренние и внешние процессы управления задачами."
+      ],
+      "stack": ["PHP", "Go", "Dart", "C#", "PostgreSQL", "Redis", "Docker"],
+      "current": false,
+      "start": "2013-07",
+      "end": "2020-06"
+    },
+    {
+      "company": "Vienna LTD",
+      "role": "Контрактный разработчик",
+      "period": "Июн 2017 — Янв 2020",
+      "location": "Астана, Казахстан",
+      "arrangement": "Удалённо · Проектная работа",
+      "summary": "ПО для здравоохранения (параллельно с основной работой).",
+      "highlights": [
+        "Разработал веб-портал для медперсонала по работе с пациентами.",
+        "Создал несколько внутренних инструментов под конкретные бизнес-задачи."
+      ],
+      "stack": ["Dart", "Angular", "C++"],
+      "current": false,
+      "start": "2017-06",
+      "end": "2020-01"
+    },
+    {
+      "company": "Space Management LTD",
+      "role": "Контрактный разработчик",
+      "period": "Июл 2014 — Фев 2015",
+      "location": "Астана, Казахстан",
+      "arrangement": "Проектная работа",
+      "summary": "Интеграция оборудования контроля доступа (параллельно с основной работой).",
+      "highlights": [
+        "Наладил обмен данными между турникетами контроля доступа и сервером."
+      ],
+      "stack": ["C++"],
+      "current": false,
+      "start": "2014-07",
+      "end": "2015-02"
+    },
+    {
+      "company": "Monitoring Plus LTD",
+      "role": "Контрактный разработчик",
+      "period": "Фев 2013 — Май 2013",
+      "location": "Костанай, Казахстан",
+      "arrangement": "Проектная работа",
+      "summary": "ПО для GPS-мониторинга транспорта.",
+      "highlights": [
+        "Консультировал по интеграции GPS-устройств при разработке внутреннего сервиса трекинга.",
+        "Разработал инструменты для автоматизации внутренних процессов."
+      ],
+      "stack": ["C++", "Delphi"],
+      "current": false,
+      "start": "2013-02",
+      "end": "2013-05"
+    },
+    {
+      "company": "390001 LTD",
+      "role": "Full-Stack инженер",
+      "period": "Фев 2009 — Апр 2013",
+      "location": "Костанай, Казахстан",
+      "arrangement": "Полная занятость",
+      "summary": "Служба такси: диспетчеризация и логистика.",
+      "highlights": [
+        "Поддерживал и расширял легаси-систему диспетчеризации.",
+        "Создал инструменты учёта для бизнес-отчётности.",
+        "Реализовал GPS-интеграцию: собственные сервер и клиент, настройка устройств в автомобилях.",
+        "Спроектировал и реализовал GSM-шлюз на внутреннем модеме через AT-команды.",
+        "Спроектировал и реализовал VoIP-шлюз на базе Asterisk и протокола SIP."
+      ],
+      "stack": ["Delphi", "C++", "MySQL"],
+      "current": false,
+      "start": "2009-02",
+      "end": "2013-04"
+    },
+    {
+      "company": "Костанайский областной акимат",
+      "role": "Контрактный разработчик",
+      "period": "Авг 2010 — Фев 2013",
+      "location": "Костанай, Казахстан",
+      "arrangement": "Проектная работа",
+      "summary": "Государственное учреждение Костанайской области (параллельно с основной работой).",
+      "highlights": [
+        "Реализовал внутренний чат в реальном времени."
+      ],
+      "stack": ["Delphi", "C++"],
+      "current": false,
+      "start": "2010-08",
+      "end": "2013-02"
+    }
+  ],
+  "projects": [
+    {
+      "name": "fx_rate_monitor",
+      "repo": "github.com/prorochestvo/fx-rate-monitor",
+      "url": "https://github.com/prorochestvo/fx-rate-monitor",
+      "stack": ["Go", "SQLite", "Telegram Bot API", "Mini App"],
+      "summary": "Боевой Telegram-бот, отслеживающий курсы валют и металлов по национальным банкам.",
+      "highlights": [
+        "Сбор по расписанию на тикерах с корректным завершением через context.",
+        "Mini App со спарклайн-графиками: авто-подбор Y-шкалы по строке, цветовое хеширование FNV-1a, классификация металлов и валют.",
+        "Хранение в SQLite и конвейер рендеринга сообщений."
+      ]
+    },
+    {
+      "name": "vpntunnel",
+      "repo": "github.com/prorochestvo/vpntunnel",
+      "url": "",
+      "stack": ["Go", "WireGuard (userspace)", "gVisor netstack"],
+      "summary": "Forward-прокси, направляющий весь исходящий трафик через WireGuard-туннель с bearer-аутентификацией — без root и модулей ядра.",
+      "highlights": [
+        "Сеть в user space через gVisor netstack; HTTP-форвардинг и HTTPS CONNECT в одном статичном бинарнике.",
+        "Аутентификация по токену со сравнением за постоянное время."
+      ]
+    },
+    {
+      "name": "NeuroCompass",
+      "repo": "коммерческий проект · NDA",
+      "url": "",
+      "stack": ["Go", "SQLite", "vanilla JS", "Telegram Mini App"],
+      "summary": "Заказной Telegram Mini App для когнитивного самоанализа, выведенный в продакшн.",
+      "highlights": [
+        "Полностью бэкенд на Go: хранилище SQLite и интеграция с LLM через OpenRouter.",
+        "Интерфейс из семи экранов."
+      ]
+    },
+    {
+      "name": "LogInjector",
+      "repo": "github.com/prorochestvo/loginjector",
+      "url": "https://github.com/prorochestvo/loginjector",
+      "stack": ["Go", "stdlib core", "HTTP middleware"],
+      "summary": "Потокобезопасная библиотека структурного логирования: fan-out в несколько приёмников с хуками по уровням.",
+      "highlights": [
+        "Подключаемые обработчики — консоль, ротация файлов, Telegram — собираются как io.Writer-приёмники.",
+        "HTTP-middleware с сохранением Flusher/Hijacker/Pusher; авто-редактирование заголовков авторизации."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "year": "2008",
+      "institution": "Костанайский социально-технический университет им. З. Алдамжара",
+      "field": "Вычислительная техника и программное обеспечение",
+      "degree": "Бакалавр"
+    }
+  ],
+  "skills": [
+    {"name": "Languages", "items": ["Go", "Scala", "PHP", "Dart"]},
+    {"name": "Frameworks", "items": ["Flutter", "Angular"]},
+    {"name": "Data", "items": ["PostgreSQL", "MySQL", "Redis"]},
+    {"name": "Infra & Tools", "items": ["Docker", "Git", "JIRA", "Nginx", "GitHub Actions"]},
+    {"name": "Domains", "items": ["CRM/ERP integration", "Payments & banking APIs", "Microservices", "GPS / GSM / VoIP", "Device communication"]}
+  ],
+  "languages": [
+    {"name": "Русский", "level": "Родной"},
+    {"name": "Английский", "level": "Базовый (A2)"}
+  ],
+  "relocation": ["Великобритания", "Германия", "Канада", "Кипр", "ОАЭ", "Панама", "США"],
+  "contacts": [
+    {"label": "Location", "value": "Казахстан (открыт к релокации)", "url": ""},
+    {"label": "Email", "value": "SeilbekSkindirov@gmail.com", "url": "mailto:SeilbekSkindirov@gmail.com"},
+    {"label": "GitHub", "value": "github.com/prorochestvo", "url": "https://github.com/prorochestvo"},
+    {"label": "Telegram", "value": "@prorochestvo", "url": "https://t.me/prorochestvo"},
+    {"label": "LinkedIn", "value": "linkedin.com/in/prorochestvo", "url": "https://www.linkedin.com/in/prorochestvo/"}
+  ]
+}

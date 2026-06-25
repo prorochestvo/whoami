@@ -1,0 +1,81 @@
+{
+  "locale": "qa",
+  "localeName": "PLACEHOLDER — not a real translation",
+  "person": {
+    "name": "[QA] Seilbek Skindirov",
+    "title": "[QA PLACEHOLDER] Software Developer · Full-Stack Engineer",
+    "location": "[QA PLACEHOLDER] Astana, Kazakhstan",
+    "tagline": "[QA PLACEHOLDER] This is a test locale used only to exercise multi-locale code paths. Do not ship.",
+    "birthYear": 1986,
+    "experience": "17+ years",
+    "githubUser": "prorochestvo"
+  },
+  "about": [
+    "[QA PLACEHOLDER] This locale is not a real translation.",
+    "[QA PLACEHOLDER] It exists only to test the multi-locale build pipeline.",
+    "[QA PLACEHOLDER] Enable it with WHOAMI_LOCALES=en,qa — never in production."
+  ],
+  "experience": [
+    {
+      "company": "[QA] Yoxel",
+      "role": "[QA PLACEHOLDER] Full-Stack Engineer",
+      "period": "Apr 2021 — Present",
+      "location": "[QA PLACEHOLDER] Tahoma, United States",
+      "arrangement": "Remote · Full-time",
+      "summary": "[QA PLACEHOLDER] Tools for automation and synchronization of business workflows.",
+      "highlights": [
+        "[QA PLACEHOLDER] Designed and implemented unified integration entry points for CRM/ERP systems.",
+        "[QA PLACEHOLDER] Maintained and enhanced MS Outlook and Gmail add-ons/extensions.",
+        "[QA PLACEHOLDER] Built data-synchronization pipelines for bidirectional dataset transfer.",
+        "[QA PLACEHOLDER] Expanded unit and integration test coverage across multiple services."
+      ],
+      "stack": ["Scala", "ZIO", "Dart", "Flutter", "PostgreSQL", "Redis"],
+      "current": true,
+      "start": "2021-04",
+      "end": ""
+    },
+    {
+      "company": "[QA] iSate LTD",
+      "role": "[QA PLACEHOLDER] Backend Engineer",
+      "period": "Jul 2020 — Mar 2021",
+      "location": "[QA PLACEHOLDER] Astana, Kazakhstan",
+      "arrangement": "Hybrid · Full-time",
+      "summary": "[QA PLACEHOLDER] Software development and document-automation services.",
+      "highlights": [
+        "[QA PLACEHOLDER] Maintained and adapted a legacy system.",
+        "[QA PLACEHOLDER] Contributed to the architecture of new backend services.",
+        "[QA PLACEHOLDER] Proposed and implemented CI/CD pipelines using TeamCity."
+      ],
+      "stack": ["C#", "PostgreSQL", "TeamCity"],
+      "current": false,
+      "start": "2020-07",
+      "end": "2021-03"
+    }
+  ],
+  "education": [
+    {
+      "year": "2008",
+      "institution": "[QA PLACEHOLDER] Z. Aldamzhar Kostanay Social-Technical University",
+      "field": "[QA PLACEHOLDER] Computer Engineering and Software (CE&S)",
+      "degree": "Bachelor"
+    }
+  ],
+  "skills": [
+    {"name": "[QA] Languages", "items": ["Go", "Scala", "C#", "PHP", "Dart", "C++", "Delphi"]},
+    {"name": "[QA] Frontend", "items": ["Flutter", "Angular", "Qt"]},
+    {"name": "[QA] Data", "items": ["PostgreSQL", "MySQL", "Redis"]},
+    {"name": "[QA] Infra & Tools", "items": ["Docker", "Git", "TeamCity", "ZIO"]},
+    {"name": "[QA] Domains", "items": ["CRM/ERP integration", "Payments & banking APIs", "Microservices", "GPS / GSM / VoIP", "Device communication"]}
+  ],
+  "languages": [
+    {"name": "[QA] Russian", "level": "Native"},
+    {"name": "[QA] English", "level": "Elementary (A2)"}
+  ],
+  "relocation": ["[QA] Great Britain", "[QA] Germany", "[QA] Canada"],
+  "contacts": [
+    {"label": "Location", "value": "[QA PLACEHOLDER] Astana, Kazakhstan", "url": ""},
+    {"label": "Email", "value": "SeilbekSkindirov@gmail.com", "url": "mailto:SeilbekSkindirov@gmail.com"},
+    {"label": "GitHub", "value": "github.com/prorochestvo", "url": "https://github.com/prorochestvo"},
+    {"label": "Telegram", "value": "@prorochestvo", "url": "https://t.me/prorochestvo"}
+  ]
+}

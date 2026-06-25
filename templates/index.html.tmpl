@@ -1,0 +1,130 @@
+{{- define "content" -}}
+{{- $p := .Resume.Person -}}
+<div class="window">
+  <header class="titlebar">
+    <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="filename">{{ $p.GitHubUser }}.cv</span>
+    {{- /* language switcher: plain <a> links as the crawlable, no-JS baseline;
+         JS in main.js upgrades this to a fetch-and-swap interaction.
+         Single-locale builds still render a 1-item list (inert but valid). */}}
+    <nav class="lang-switcher" aria-label="Language">
+      <ul class="lang-list" role="list">
+        {{- range .LocaleLinks }}
+        <li>
+          {{- if .Current }}
+          <span class="lang-v lang-current" aria-current="page" data-locale="{{ .Lang }}">{{ .Lang }}</span>
+          {{- else }}
+          <a class="lang-v lang-link" href="{{ .Href }}" hreflang="{{ .Lang }}" data-locale="{{ .Lang }}">{{ .Lang }}</a>
+          {{- end }}
+        </li>
+        {{- end }}
+      </ul>
+    </nav>
+  </header>
+
+  <main class="editor">
+    <section id="whoami" class="block" aria-labelledby="name">
+      <p class="prompt" aria-hidden="true"><span class="sym">$</span> <span class="typed">whoami</span><span class="cursor"></span></p>
+      <h1 id="name" class="name">{{ $p.Name }}</h1>
+      <p class="role">{{ $p.Title }}</p>
+      <p class="tagline">{{ $p.Tagline }}</p>
+      <ul class="facts">
+        <li><span class="k">experience</span><span class="v">{{ $p.Experience }}</span></li>
+        {{- range .Resume.Contacts }}
+        <li><span class="k">{{ lower .Label }}</span><span class="v">{{ if .URL }}<a href="{{ .URL }}">{{ .Value }}</a>{{ else }}{{ .Value }}{{ end }}</span></li>
+        {{- end }}
+      </ul>
+    </section>
+
+    {{- if .GitHub.Available }}
+    <section id="stats" class="block" aria-labelledby="stats-h">
+      <h2 id="stats-h" class="comment">// github.stats</h2>
+      <ul class="stats">
+        <li><strong>{{ .GitHub.PublicRepos }}</strong><span>repos</span></li>
+        <li><strong>{{ .GitHub.Followers }}</strong><span>followers</span></li>
+        <li><strong>{{ .GitHub.TotalStars }}</strong><span>stars</span></li>
+        <li><strong>{{ .GitHub.Following }}</strong><span>following</span></li>
+      </ul>
+      {{- if .GitHub.TopLanguages }}
+      <p class="langs">{{ range .GitHub.TopLanguages }}<span class="tag">{{ .Name }}</span>{{ end }}</p>
+      {{- end }}
+    </section>
+    {{- end }}
+
+    <section id="about" class="block" aria-labelledby="about-h">
+      <h2 id="about-h" class="comment">// about</h2>
+      {{- range .Resume.About }}
+      <p class="prose">{{ . }}</p>
+      {{- end }}
+    </section>
+
+    <section id="experience" class="block" aria-labelledby="exp-h">
+      <h2 id="exp-h" class="comment">// experience</h2>
+      {{- range .Resume.Experience }}
+      <article class="job">
+        <h3 class="job-role">{{ .Role }} <span class="at">@ {{ .Company }}</span>{{ if .Current }} <span class="now">active</span>{{ end }}</h3>
+        <p class="job-meta">{{ .Period }} · {{ .Location }} · {{ .Arrangement }}</p>
+        <p class="job-summary">{{ .Summary }}</p>
+        <ul class="job-highlights">
+          {{- range .Highlights }}
+          <li>{{ . }}</li>
+          {{- end }}
+        </ul>
+        <p class="stack">{{ range .Stack }}<span class="tag">{{ . }}</span>{{ end }}</p>
+      </article>
+      {{- end }}
+    </section>
+
+    {{- if .Resume.Projects }}
+    <section id="projects" class="block" aria-labelledby="proj-h">
+      <h2 id="proj-h" class="comment">// projects</h2>
+      {{- range .Resume.Projects }}
+      <article class="project">
+        <h3 class="project-name"><span class="project-id">{{ .Name }}</span>{{ if .Repo }}<span class="project-repo">{{ if .URL }}<a href="{{ .URL }}">{{ .Repo }}</a>{{ else }}{{ .Repo }}{{ end }}</span>{{ end }}</h3>
+        {{- if .Stack }}<p class="stack">{{ range .Stack }}<span class="tag">{{ . }}</span>{{ end }}</p>{{ end }}
+        <p class="job-summary">{{ .Summary }}</p>
+        {{- if .Highlights }}
+        <ul class="job-highlights">
+          {{- range .Highlights }}
+          <li>{{ . }}</li>
+          {{- end }}
+        </ul>
+        {{- end }}
+      </article>
+      {{- end }}
+    </section>
+    {{- end }}
+
+    <section id="skills" class="block" aria-labelledby="skills-h">
+      <h2 id="skills-h" class="comment">// skills</h2>
+      <dl class="skills">
+        {{- range .Resume.Skills }}
+        <div class="skill-row">
+          <dt>{{ .Name }}</dt>
+          <dd>{{ range .Items }}<span class="tag">{{ . }}</span>{{ end }}</dd>
+        </div>
+        {{- end }}
+      </dl>
+    </section>
+
+    <section id="education" class="block" aria-labelledby="edu-h">
+      <h2 id="edu-h" class="comment">// education</h2>
+      {{- range .Resume.Education }}
+      <article class="edu">
+        <h3 class="edu-inst">{{ .Institution }}</h3>
+        <p class="edu-meta">{{ .Degree }} · {{ .Field }} · {{ .Year }}</p>
+      </article>
+      {{- end }}
+      <p class="prose langs-spoken">
+        {{- range .Resume.Languages }}<span class="tag">{{ .Name }}</span>{{ end -}}
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="statusbar">
+    <span>// generated {{ .GeneratedAt.Format "2006-01-02" }}</span>
+    <span>© {{ .Year }} {{ $p.Name }}</span>
+  </footer>
+</div>
+{{- end -}}

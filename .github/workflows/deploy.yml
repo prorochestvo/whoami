@@ -1,0 +1,70 @@
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  # monthly rebuild (1st of the month, 00:00 UTC) to refresh the baked-in GitHub
+  # stats without a code change.
+  schedule:
+    - cron: "0 0 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.26"
+          cache: true
+
+      - name: generate static site
+        env:
+          WHOAMI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # set this repo variable to the production URL so canonical/OpenGraph
+          # tags are correct; without it the generator falls back to localhost.
+          WHOAMI_SITE_URL: ${{ vars.WHOAMI_SITE_URL }}
+        run: CGO_ENABLED=0 go run ./cmd/whoami
+
+      - name: ensure the Pages project exists
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if ! npx --yes wrangler@3 pages project list | grep -qw whoami; then
+            npx --yes wrangler@3 pages project create whoami --production-branch=main
+          fi
+
+      - name: deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # account id is not sensitive; it is kept as a repo variable.
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy build --project-name=whoami --branch=main --commit-dirty=true
+
+      - name: ensure the custom domain is attached
+        env:
+          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          SITE_URL: ${{ vars.WHOAMI_SITE_URL }}
+        run: |
+          domain="$(printf '%s' "$SITE_URL" | sed -E 's#^https?://##; s#/.*$##')"
+          if [ -z "$domain" ]; then echo "no WHOAMI_SITE_URL set; skipping"; exit 0; fi
+          api="https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_ID/pages/projects/whoami/domains"
+          echo "ensuring custom domain: $domain"
+          if curl -s -H "Authorization: Bearer $CF_API_TOKEN" "$api" | grep -qE "\"name\"[[:space:]]*:[[:space:]]*\"$domain\""; then
+            echo "already attached"; exit 0
+          fi
+          resp="$(curl -s -X POST -H "Authorization: Bearer $CF_API_TOKEN" -H 'Content-Type: application/json' --data "{\"name\":\"$domain\"}" "$api")"
+          echo "$resp" | head -c 600; echo
+          echo "$resp" | grep -q '"success":true' && echo "attached OK" || echo "attach not confirmed (may need the dashboard or a token with zone DNS perms)"

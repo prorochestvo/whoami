@@ -1,0 +1,12 @@
+# build outputs, scratch and logs (only these three are gitignored at root)
+/build/
+/tmp/
+/logs/
+
+# secrets and local env
+.env
+.env.*
+
+# os / editor cruft
+.DS_Store
+.idea/
