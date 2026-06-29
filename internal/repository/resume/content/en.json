@@ -153,9 +153,9 @@
   ],
   "projects": [
     {
-      "name": "fx_rate_monitor",
-      "repo": "github.com/prorochestvo/fx-rate-monitor",
-      "url": "https://github.com/prorochestvo/fx-rate-monitor",
+      "name": "beacon",
+      "repo": "github.com/prorochestvo/beacon",
+      "url": "https://github.com/prorochestvo/beacon",
       "stack": ["Go", "SQLite", "Telegram Bot API", "Mini App"],
       "summary": "Production Telegram bot tracking FX and metal rates across national banks.",
       "highlights": [

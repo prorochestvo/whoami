@@ -56,7 +56,7 @@ Then open the local preview URL printed by `make run` (e.g. http://localhost:808
 
 ## Project structure
 
-The layout is a DDD-style split (mirroring the `fx_rate_monitor` project):
+The layout is a DDD-style split (mirroring the `beacon` project):
 
 | Path                                | Role                                                                       |
 |-------------------------------------|---------------------------------------------------------------------------|

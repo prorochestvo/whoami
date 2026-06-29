@@ -46,7 +46,7 @@ Do not invent `make` targets beyond the five above.
 
 ## Architecture Overview
 
-The layout follows a DDD-style split (mirroring the `fx_rate_monitor` project):
+The layout follows a DDD-style split (mirroring the `beacon` project):
 `domain` → `repository` / `infrastructure` → `application` → `dto`, wired by `cmd`.
 
 Build-time generation flow:
