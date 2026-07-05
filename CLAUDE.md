@@ -2,10 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-> **Status: scaffolding in progress.** The repository is being built out — not every
-> file described below exists yet. The sections describe the **agreed shape** of the
-> project (stack, structure, deploy, conventions). Keep this file in sync as the real
-> code lands.
+> **Status: scaffolding in progress** — sections describe the agreed shape (stack, structure, deploy, conventions); not every file exists yet. Keep this file in sync as code lands.
 
 ## What this is
 
@@ -22,25 +19,14 @@ JetBrains Mono, a dark theme, near-monochrome with a single accent color.
 Pure Go, `CGO_ENABLED=0`. The generator produces the deployed artifact under `build/`.
 
 ```bash
-make build    # CGO_ENABLED=0; runs the generator → writes static site into build/
-make run      # build, then serve build/ locally over HTTP for preview
-make test     # go fmt + go vet + go test ./...
+make build    # CGO_ENABLED=0; generator -> build/
+make run      # build, then serve build/ locally
+make test     # go fmt + vet + test ./...
 make format   # go fmt ./...
-make clean    # remove build/ + go mod tidy
+make clean    # rm build/ + go mod tidy
 ```
 
-Targeted test runs:
-
-```bash
-# single top-level test
-CGO_ENABLED=0 go test -run TestName ./internal/...
-
-# verbose, single package
-CGO_ENABLED=0 go test -v ./internal/render/
-
-# single subtest
-CGO_ENABLED=0 go test -run 'TestName/subtest_name' ./internal/...
-```
+Targeted runs: `CGO_ENABLED=0 go test -run 'TestName[/subtest_name]' ./internal/...` (add `-v` for a single package).
 
 Do not invent `make` targets beyond the five above.
 
@@ -64,7 +50,7 @@ in production via a scheduled rebuild (cron → deploy hook), never by a live se
 | Layer | Location | Role |
 |-------|----------|------|
 | Entry point | `cmd/whoami/main.go` | Composition root: reads env, wires repository + GitHub client + renderer, runs the build |
-| Domain | `internal/domain/` | Pure CV value objects (`Person`, `Experience`, `Education`, `SkillGroup`, `Language`, `Contact`, `Resume`, `GitHubStats`). No dependencies. |
+| Domain | `internal/domain/` | Pure CV value objects (one type per `.go` file). No dependencies. |
 | Repository | `internal/repository/resume/` | In-memory source of truth for the CV content; `Load()` returns a `domain.Resume`. |
 | Infrastructure | `internal/infrastructure/github/` | Build-time GitHub API client → `domain.GitHubStats`. MUST degrade gracefully (offline / no token / rate-limited) so the build never fails. |
 | Application | `internal/application/site/` | `Builder` (use-case: fetch stats, assemble `dto.Page`) and `Renderer` (html/template → `build/`, copy `web/*`). Defines the `StatsFetcher` interface it consumes. |
@@ -73,37 +59,15 @@ in production via a scheduled rebuild (cron → deploy hook), never by a live se
 | Web | `web/` | Static source: `css/`, `js/`, `fonts/` (`jetbrains-mono-{400,500,700}.woff2`), `img/`, `robots.txt`, `_headers`. |
 | Build | `build/` | Generated output. Gitignored. The Cloudflare Pages output directory. |
 
-**Dependency direction:** `cmd` wires everything; `application/site` depends on `domain`
-and `dto` and consumes a `StatsFetcher` interface; `infrastructure/github` and
-`repository/resume` depend only on `domain`; `domain` has no dependencies. The GitHub
-client sits behind the `StatsFetcher` interface so a failed or empty fetch degrades
-gracefully and so it can be faked in tests.
+**Dependency direction (inward):** `cmd` wires everything; `application/site` -> `domain`+`dto` behind a `StatsFetcher` interface; `infrastructure/github` and `repository/resume` -> `domain` only; `domain` -> nothing. `StatsFetcher` lets a failed/empty fetch degrade gracefully and be faked in tests.
 
 ## Deployment (Cloudflare Pages)
 
-No server runs anywhere — the deployed artifact is the static `build/` directory served by
-Cloudflare Pages. Full step-by-step setup lives in [`docs/deployment.md`](docs/deployment.md).
+No server runs anywhere — the static `build/` directory is served by Cloudflare Pages. Full setup: [`docs/deployment.md`](docs/deployment.md).
 
-**Primary path — GitHub Actions builds and deploys** (self-contained; pins its own Go
-version, independent of Cloudflare's build image):
+GitHub Actions is the primary path (self-contained, pins its own Go version): `ci.yml` validates PRs (`gofmt`, `go vet`, `go test`, generator build); `deploy.yml` runs the generator + `wrangler pages deploy build` on push to `main`, a monthly `schedule`, and manual dispatch — the scheduled run refreshes baked-in GitHub stats with no code change. Secrets `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID`, variable `WHOAMI_SITE_URL`; the stats fetch's built-in `GITHUB_TOKEN` is rate-limit only — never in output, never committed.
 
-- `.github/workflows/ci.yml` — on pull requests: `gofmt` check, `go vet`, `go test`, and a
-  generator build.
-- `.github/workflows/deploy.yml` — on push to `main`, a monthly `schedule` (1st of the
-  month), and manual dispatch: runs the generator and `wrangler pages deploy build`. The
-  scheduled run refreshes the baked-in GitHub stats without a code change.
-- Required GitHub secrets/variables: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`
-  (secrets) and `WHOAMI_SITE_URL` (variable). The stats fetch uses the workflow's built-in
-  `GITHUB_TOKEN`; it only raises the rate limit and MUST never appear in output or be
-  committed.
-
-**Alternative — Cloudflare Pages Git integration** (gives per-PR previews): build command
-`make build`, output dir `build/`, env `WHOAMI_GITHUB_TOKEN` / `WHOAMI_SITE_URL` /
-`GO_VERSION=1.26`; refresh stats with a Deploy Hook on a schedule. Trade-off: depends on the
-Go version in Cloudflare's build image.
-
-**`_headers`** lives at the output root (`web/_headers`, copied into `build/`) and defines
-caching and security headers (CSP, `X-Content-Type-Options`, etc.).
+`web/_headers` (copied into `build/`) defines caching + security headers (CSP, `X-Content-Type-Options`).
 
 ## Conventions
 
@@ -119,24 +83,18 @@ caching and security headers (CSP, `X-Content-Type-Options`, etc.).
 - **Auto-escaping.** All injected GitHub / API data flows through `html/template`'s
   contextual auto-escaping. Do not bypass it (`template.HTML` etc.) for external data.
 - **Secrets via env only.** Never read or edit `.env`.
-- **Go style.** Idiomatic Go; wrap errors with `%w`; handle every returned error;
-  `context.Context` is the first parameter where applicable; table-ish tests with
-  `testify`; one `Test*` per method with scenarios as `t.Run(...)` subtests.
-- **Comments** in code are English and start with a lowercase first word.
+- **Go style.** Idiomatic Go (wrap errors with `%w`, `context.Context` first param); `testify` tests, one `Test*` per method with scenarios as `t.Run(...)` subtests.
+- **Comments** start with a lowercase first word.
 
 ## Constraints
 
 - **Pure Go, `CGO_ENABLED=0`** for all build and test commands.
-- **The generated front-end is vanilla HTML / CSS / JS** — no framework, no bundler, no
-  npm, no WASM. WebAssembly was explicitly considered and rejected: bundle weight, dead
-  SEO (content not in HTML), slow first paint.
+- **The generated front-end is vanilla HTML / CSS / JS** — no framework, bundler, npm, or WASM (WASM was rejected because it kills SEO: content would not be in the HTML).
 - **Fonts are self-hosted** (`web/fonts/*.woff2`) — no runtime CDN.
 - **The GitHub token never appears in generated output** and is never committed.
 - **The GitHub fetch must never break the build.** Offline, no token, or rate-limited →
   fall back gracefully and render the site without (or with cached) stats.
-- **Build outputs in `build/`, scratch in `tmp/`, logs in `logs/`** — these three are
-  gitignored. Never run `go build` without `-o ./build/...`.
-- **Never read or edit `.env` files.**
+- **Never run `go build` without `-o ./build/...`.** `build/` (output), `tmp/` (scratch), `logs/` are gitignored.
 
 ## Planning Workflow
 
@@ -149,25 +107,11 @@ plans/
 └── history/             # abandoned / superseded
 ```
 
-- **Active** plans use a zero-padded sequential index + kebab-case slug (`NNN-slug.md`).
-  Pick the next number from the highest existing prefix across `plans/`, `plans/completed/`,
-  and `plans/history/`.
-- **Completed** plans move to `plans/completed/` as `YYMMDD.NNNN.slug.md` (`NNNN` resets
-  to `0001` each day) once the work ships.
-- **Abandoned / superseded** plans move to `plans/history/`, keeping their `NNN-` name.
-- One plan per concern. Plan before code for anything beyond a trivial edit. If the
-  implementation diverges from the plan, fix the plan before completing it.
+- **Active**: `NNN-slug.md`, zero-padded; next `NNN` = the highest existing prefix across `plans/`, `plans/completed/`, and `plans/history/`.
+- **Completed** -> `plans/completed/YYMMDD.NNNN.slug.md` (`NNNN` resets to `0001` each day).
+- **Abandoned/superseded** -> `plans/history/`, keeping the `NNN-` name.
+- One plan per concern; plan before any non-trivial edit; if code diverges, fix the plan before completing it.
 
 ## Agent Pipeline
 
-Non-trivial work flows through specialized agents in `.claude/agents/`:
-
-1. **`site-architect`** — produces a plan file in `plans/` (see Planning Workflow).
-2. **`site-engineer`** — implements the tasks defined in the plan.
-3. **`site-reviewer` ×3 (parallel lenses)** —
-   A: correctness & tests; B: SEO, accessibility & security; C: performance &
-   architecture. Launched in one message so they run concurrently.
-4. The **orchestrator** synthesizes the three reports, resolves conflicts, and presents a
-   merged punch list.
-5. **`site-fixer`** — invoked on any failing build or tests; patches the minimal amount
-   needed to go green, then a targeted re-review runs.
+Non-trivial work flows through `.claude/agents/`: **site-architect** writes the plan (see Planning Workflow) -> **site-engineer** implements -> **site-reviewer** is launched x3 in one message as parallel lenses (A correctness/tests, B SEO/accessibility/security, C performance/architecture) -> the orchestrator synthesizes the three into one punch list -> **site-fixer** patches failing build/tests, then a targeted re-review runs.
