@@ -10,3 +10,9 @@
 # os / editor cruft
 .DS_Store
 .idea/
+
+# Claude Code: commit settings, skills, and agent memory
+.claude/*
+!.claude/settings.json
+!.claude/skills/
+!.claude/agent-memory/
