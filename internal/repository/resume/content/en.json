@@ -156,12 +156,24 @@
       "name": "beacon",
       "repo": "github.com/prorochestvo/beacon",
       "url": "https://github.com/prorochestvo/beacon",
-      "stack": ["Go", "SQLite", "Telegram Bot API", "Mini App"],
-      "summary": "Production Telegram bot tracking FX and metal rates across national banks.",
+      "stack": ["Go", "SQLite", "WASM", "Telegram Bot API", "Mini App", "REST"],
+      "summary": "Production Telegram bot and Mini App tracking FX and precious-metal rates across national banks, built as a multi-binary Go service.",
       "highlights": [
-        "Ticker-driven scheduled collection with graceful shutdown via context.",
-        "Sparkline-chart Mini App: per-row auto-fit Y-scale, FNV-1a color hashing, metal/currency classification.",
-        "SQLite persistence and a message-rendering pipeline."
+        "Multi-binary architecture — separate collector, notifier, web, migrator and operator (doctor) processes over a shared pure-Go SQLite store.",
+        "WASM Telegram Mini App for per-user subscriptions: sparkline charts, rate history, and delta / interval / daily / cron alert conditions.",
+        "Versioned REST API with an embedded operator dashboard; LLM-assisted extraction-rule generation in the doctor tool."
+      ]
+    },
+    {
+      "name": "yarddog",
+      "repo": "github.com/prorochestvo/yarddog",
+      "url": "https://github.com/prorochestvo/yarddog",
+      "stack": ["Go", "SQLite", "Raspberry Pi", "Telegram Bot API"],
+      "summary": "Self-hosted home-network watchdog that monitors the internet uplink and reboots a GPON router when the link goes down.",
+      "highlights": [
+        "Cron-fired, port-less watchdog on a Raspberry Pi — detects outages against independent IP and DNS targets, then reboots the router by driving its web UI (session login, per-request CSRF token).",
+        "Records every check, reboot and recovery phase in SQLite, announces reboots over Telegram, and exposes the history as JSON through an optional read-only LAN query daemon.",
+        "Pure-Go, cgo-free host telemetry (CPU, memory, disk, temperature, network counters); cross-compiles for linux/arm64, amd64 and Apple Silicon."
       ]
     },
     {
@@ -196,6 +208,25 @@
         "Pluggable handlers — console, rotating file, Telegram — composed as io.Writer sinks.",
         "HTTP middleware preserving Flusher/Hijacker/Pusher; auto-redacts authorization headers."
       ]
+    },
+    {
+      "name": "DSNInjector",
+      "repo": "github.com/prorochestvo/dsninjector",
+      "url": "https://github.com/prorochestvo/dsninjector",
+      "stack": ["Go", "stdlib core"],
+      "summary": "Go library for parsing and building Data Source Names — connection strings, environment variables and data-source configuration.",
+      "highlights": [
+        "Parses a DSN into structured accessors: driver, host, port, database and query options.",
+        "No runtime dependencies beyond the standard library."
+      ]
+    },
+    {
+      "name": "whoami",
+      "repo": "github.com/prorochestvo/whoami",
+      "url": "https://github.com/prorochestvo/whoami",
+      "stack": ["Go", "html/template", "Cloudflare Pages"],
+      "summary": "A static-site generator in Go that builds a personal CV / portfolio into plain static HTML at build time — no backend to run.",
+      "highlights": []
     }
   ],
   "education": [

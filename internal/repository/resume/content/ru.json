@@ -156,12 +156,24 @@
       "name": "beacon",
       "repo": "github.com/prorochestvo/beacon",
       "url": "https://github.com/prorochestvo/beacon",
-      "stack": ["Go", "SQLite", "Telegram Bot API", "Mini App"],
-      "summary": "Боевой Telegram-бот, отслеживающий курсы валют и металлов по национальным банкам.",
+      "stack": ["Go", "SQLite", "WASM", "Telegram Bot API", "Mini App", "REST"],
+      "summary": "Боевой Telegram-бот и Mini App, отслеживающий курсы валют и драгметаллов по национальным банкам; собран как многобинарный сервис на Go.",
       "highlights": [
-        "Сбор по расписанию на тикерах с корректным завершением через context.",
-        "Mini App со спарклайн-графиками: авто-подбор Y-шкалы по строке, цветовое хеширование FNV-1a, классификация металлов и валют.",
-        "Хранение в SQLite и конвейер рендеринга сообщений."
+        "Многобинарная архитектура — отдельные процессы collector, notifier, web, migrator и operator (doctor) поверх общего SQLite-хранилища на чистом Go.",
+        "WASM Telegram Mini App для пользовательских подписок: спарклайн-графики, история курсов и условия оповещений delta / interval / daily / cron.",
+        "Версионируемый REST API со встроенным операторским дашбордом; генерация правил извлечения с помощью LLM в инструменте doctor."
+      ]
+    },
+    {
+      "name": "yarddog",
+      "repo": "github.com/prorochestvo/yarddog",
+      "url": "https://github.com/prorochestvo/yarddog",
+      "stack": ["Go", "SQLite", "Raspberry Pi", "Telegram Bot API"],
+      "summary": "Self-hosted сторож домашней сети: следит за интернет-аплинком и перезагружает GPON-роутер, когда связь пропадает.",
+      "highlights": [
+        "Беспортовый сторож на Raspberry Pi, запускаемый по cron — определяет обрыв по независимым IP- и DNS-целям и перезагружает роутер через его web-интерфейс (логин с сессией, CSRF-токен на каждый запрос).",
+        "Пишет каждую проверку, перезагрузку и фазу восстановления в SQLite, сообщает о перезагрузках в Telegram и отдаёт историю как JSON через опциональный read-only демон в LAN.",
+        "Сбор host-телеметрии на чистом Go без cgo (CPU, память, диск, температура, счётчики сети); кросс-компиляция под linux/arm64, amd64 и Apple Silicon."
       ]
     },
     {
@@ -196,6 +208,25 @@
         "Подключаемые обработчики — консоль, ротация файлов, Telegram — собираются как io.Writer-приёмники.",
         "HTTP-middleware с сохранением Flusher/Hijacker/Pusher; авто-редактирование заголовков авторизации."
       ]
+    },
+    {
+      "name": "DSNInjector",
+      "repo": "github.com/prorochestvo/dsninjector",
+      "url": "https://github.com/prorochestvo/dsninjector",
+      "stack": ["Go", "stdlib core"],
+      "summary": "Go-библиотека для разбора и сборки Data Source Name — строк подключения, переменных окружения и конфигурации источников данных.",
+      "highlights": [
+        "Разбирает DSN в структурированные аксессоры: драйвер, хост, порт, база и опции запроса.",
+        "Без внешних зависимостей помимо стандартной библиотеки."
+      ]
+    },
+    {
+      "name": "whoami",
+      "repo": "github.com/prorochestvo/whoami",
+      "url": "https://github.com/prorochestvo/whoami",
+      "stack": ["Go", "html/template", "Cloudflare Pages"],
+      "summary": "Генератор статического сайта на Go: собирает личное резюме / портфолио в статический HTML на этапе сборки — без бэкенда.",
+      "highlights": []
     }
   ],
   "education": [
