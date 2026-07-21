@@ -153,7 +153,7 @@
   ],
   "projects": [
     {
-      "name": "beacon",
+      "name": "Beacon",
       "repo": "github.com/prorochestvo/beacon",
       "url": "https://github.com/prorochestvo/beacon",
       "stack": ["Go", "SQLite", "WASM", "Telegram Bot API", "Mini App", "REST"],
@@ -165,7 +165,7 @@
       ]
     },
     {
-      "name": "yarddog",
+      "name": "YardDog",
       "repo": "github.com/prorochestvo/yarddog",
       "url": "https://github.com/prorochestvo/yarddog",
       "stack": ["Go", "SQLite", "Raspberry Pi", "Telegram Bot API"],
@@ -177,9 +177,9 @@
       ]
     },
     {
-      "name": "vpntunnel",
+      "name": "VPNTunnel",
       "repo": "github.com/prorochestvo/vpntunnel",
-      "url": "",
+      "url": "https://github.com/prorochestvo/vpntunnel",
       "stack": ["Go", "WireGuard (userspace)", "gVisor netstack"],
       "summary": "Forward HTTP proxy routing all egress through a bearer-authenticated WireGuard tunnel — no root, no kernel modules.",
       "highlights": [
@@ -221,7 +221,7 @@
       ]
     },
     {
-      "name": "whoami",
+      "name": "WhoAmI",
       "repo": "github.com/prorochestvo/whoami",
       "url": "https://github.com/prorochestvo/whoami",
       "stack": ["Go", "html/template", "Cloudflare Pages"],
