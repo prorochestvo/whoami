@@ -17,8 +17,8 @@
   ],
   "experience": [
     {
-      "company": "[QA] Yoxel",
-      "role": "[QA PLACEHOLDER] Full-Stack Engineer",
+      "company": "[QA] Repfabric LLC (via Yoxel, Inc, Employer of Record)",
+      "role": "[QA PLACEHOLDER] Backend Engineer",
       "period": "Apr 2021 — Present",
       "location": "[QA PLACEHOLDER] Tahoma, United States",
       "arrangement": "Remote · Full-time",
@@ -29,7 +29,7 @@
         "[QA PLACEHOLDER] Built data-synchronization pipelines for bidirectional dataset transfer.",
         "[QA PLACEHOLDER] Expanded unit and integration test coverage across multiple services."
       ],
-      "stack": ["Scala", "ZIO", "Dart", "Flutter", "PostgreSQL", "Redis"],
+      "stack": ["Scala", "ZIO", "Dart", "PostgreSQL"],
       "current": true,
       "start": "2021-04",
       "end": ""

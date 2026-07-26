@@ -17,8 +17,8 @@
   ],
   "experience": [
     {
-      "company": "Yoxel",
-      "role": "Full-Stack инженер",
+      "company": "Repfabric LLC (через Yoxel, Inc, Employer of Record)",
+      "role": "Backend-инженер",
       "period": "Апр 2021 — наст. время",
       "location": "Тахома, США",
       "arrangement": "Удалённо · Полная занятость",
@@ -29,7 +29,7 @@
         "Построил пайплайны двусторонней синхронизации данных между сторонними системами.",
         "Расширил покрытие модульными и интеграционными тестами в нескольких сервисах."
       ],
-      "stack": ["Scala", "ZIO", "Dart", "Flutter", "PostgreSQL", "Redis"],
+      "stack": ["Scala", "ZIO", "Dart", "PostgreSQL"],
       "current": true,
       "start": "2021-04",
       "end": ""
@@ -157,9 +157,9 @@
       "repo": "github.com/prorochestvo/beacon",
       "url": "https://github.com/prorochestvo/beacon",
       "stack": ["Go", "SQLite", "WASM", "Telegram Bot API", "Mini App", "REST"],
-      "summary": "Боевой Telegram-бот и Mini App, отслеживающий курсы валют и драгметаллов по национальным банкам; собран как многобинарный сервис на Go.",
+      "summary": "Боевой Telegram-бот и Mini App, отслеживающий курсы валют и драгметаллов по национальным банкам; собран как многобинарный сервис.",
       "highlights": [
-        "Многобинарная архитектура — отдельные процессы collector, notifier, web, migrator и operator (doctor) поверх общего SQLite-хранилища на чистом Go.",
+        "Многобинарная архитектура — отдельные процессы collector, notifier, web, migrator и operator (doctor) поверх общего SQLite-хранилища.",
         "WASM Telegram Mini App для пользовательских подписок: спарклайн-графики, история курсов и условия оповещений delta / interval / daily / cron.",
         "Версионируемый REST API со встроенным операторским дашбордом; генерация правил извлечения с помощью LLM в инструменте doctor."
       ]
@@ -173,7 +173,7 @@
       "highlights": [
         "Беспортовый сторож на Raspberry Pi, запускаемый по cron — определяет обрыв по независимым IP- и DNS-целям и перезагружает роутер через его web-интерфейс (логин с сессией, CSRF-токен на каждый запрос).",
         "Пишет каждую проверку, перезагрузку и фазу восстановления в SQLite, сообщает о перезагрузках в Telegram и отдаёт историю как JSON через опциональный read-only демон в LAN.",
-        "Сбор host-телеметрии на чистом Go без cgo (CPU, память, диск, температура, счётчики сети); кросс-компиляция под linux/arm64, amd64 и Apple Silicon."
+        "Сбор host-телеметрии (CPU, память, диск, температура, счётчики сети) с кросс-компиляцией под linux/arm64, amd64 и Apple Silicon."
       ]
     },
     {
@@ -194,7 +194,7 @@
       "stack": ["Go", "SQLite", "vanilla JS", "Telegram Mini App"],
       "summary": "Заказной Telegram Mini App для когнитивного самоанализа, выведенный в продакшн.",
       "highlights": [
-        "Полностью бэкенд на Go: хранилище SQLite и интеграция с LLM через OpenRouter.",
+        "Полноценный бэкенд: хранилище SQLite и интеграция с LLM через OpenRouter.",
         "Интерфейс из семи экранов."
       ]
     },
@@ -225,7 +225,7 @@
       "repo": "github.com/prorochestvo/whoami",
       "url": "https://github.com/prorochestvo/whoami",
       "stack": ["Go", "html/template", "Cloudflare Pages"],
-      "summary": "Генератор статического сайта на Go: собирает личное резюме / портфолио в статический HTML на этапе сборки — без бэкенда.",
+      "summary": "Генератор статического сайта: собирает личное резюме / портфолио в статический HTML на этапе сборки — без бэкенда.",
       "highlights": []
     }
   ],

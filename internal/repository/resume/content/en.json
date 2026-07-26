@@ -17,8 +17,8 @@
   ],
   "experience": [
     {
-      "company": "Yoxel",
-      "role": "Full-Stack Engineer",
+      "company": "Repfabric LLC (via Yoxel, Inc, Employer of Record)",
+      "role": "Backend Engineer",
       "period": "Apr 2021 — Present",
       "location": "Tahoma, United States",
       "arrangement": "Remote · Full-time",
@@ -29,7 +29,7 @@
         "Built data-synchronization pipelines for bidirectional dataset transfer between third-party systems.",
         "Expanded unit and integration test coverage across multiple services."
       ],
-      "stack": ["Scala", "ZIO", "Dart", "Flutter", "PostgreSQL", "Redis"],
+      "stack": ["Scala", "ZIO", "Dart", "PostgreSQL"],
       "current": true,
       "start": "2021-04",
       "end": ""
@@ -157,9 +157,9 @@
       "repo": "github.com/prorochestvo/beacon",
       "url": "https://github.com/prorochestvo/beacon",
       "stack": ["Go", "SQLite", "WASM", "Telegram Bot API", "Mini App", "REST"],
-      "summary": "Production Telegram bot and Mini App tracking FX and precious-metal rates across national banks, built as a multi-binary Go service.",
+      "summary": "Production Telegram bot and Mini App tracking FX and precious-metal rates across national banks, built as a multi-binary service.",
       "highlights": [
-        "Multi-binary architecture — separate collector, notifier, web, migrator and operator (doctor) processes over a shared pure-Go SQLite store.",
+        "Multi-binary architecture — separate collector, notifier, web, migrator and operator (doctor) processes over a shared SQLite store.",
         "WASM Telegram Mini App for per-user subscriptions: sparkline charts, rate history, and delta / interval / daily / cron alert conditions.",
         "Versioned REST API with an embedded operator dashboard; LLM-assisted extraction-rule generation in the doctor tool."
       ]
@@ -173,7 +173,7 @@
       "highlights": [
         "Cron-fired, port-less watchdog on a Raspberry Pi — detects outages against independent IP and DNS targets, then reboots the router by driving its web UI (session login, per-request CSRF token).",
         "Records every check, reboot and recovery phase in SQLite, announces reboots over Telegram, and exposes the history as JSON through an optional read-only LAN query daemon.",
-        "Pure-Go, cgo-free host telemetry (CPU, memory, disk, temperature, network counters); cross-compiles for linux/arm64, amd64 and Apple Silicon."
+        "Cross-platform host telemetry (CPU, memory, disk, temperature, network counters), cross-compiling for linux/arm64, amd64 and Apple Silicon."
       ]
     },
     {
@@ -194,7 +194,7 @@
       "stack": ["Go", "SQLite", "vanilla JS", "Telegram Mini App"],
       "summary": "Commissioned Telegram Mini App for cognitive self-analysis, delivered to production.",
       "highlights": [
-        "Full Go backend: SQLite storage and OpenRouter LLM integration.",
+        "Full backend: SQLite storage and OpenRouter LLM integration.",
         "Seven-screen UI."
       ]
     },
@@ -225,7 +225,7 @@
       "repo": "github.com/prorochestvo/whoami",
       "url": "https://github.com/prorochestvo/whoami",
       "stack": ["Go", "html/template", "Cloudflare Pages"],
-      "summary": "A static-site generator in Go that builds a personal CV / portfolio into plain static HTML at build time — no backend to run.",
+      "summary": "A static-site generator that builds a personal CV / portfolio into plain static HTML at build time — no backend to run.",
       "highlights": []
     }
   ],
