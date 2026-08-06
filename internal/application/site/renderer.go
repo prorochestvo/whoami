@@ -9,21 +9,31 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/prorochestvo/whoami/internal/domain"
 	"github.com/prorochestvo/whoami/internal/dto"
 )
 
-func NewRenderer(templatesDir, webDir, outDir string) (*Renderer, error) {
+// PDFRenderer produces the CV PDF bytes for a résumé. It is defined here, where
+// the Renderer consumes it, so the application layer never imports the
+// fpdf-backed infrastructure/pdf package directly; the wiring in cmd/whoami
+// injects the concrete implementation.
+type PDFRenderer interface {
+	Render(domain.Resume) ([]byte, error)
+}
+
+func NewRenderer(templatesDir, webDir, outDir string, pdf PDFRenderer) (*Renderer, error) {
 	tmpl, err := template.New("site").Funcs(funcMap()).ParseGlob(filepath.Join(templatesDir, "*.tmpl"))
 	if err != nil {
 		return nil, fmt.Errorf("render: parse templates: %w", err)
 	}
-	return &Renderer{tmpl: tmpl, webDir: webDir, outDir: outDir}, nil
+	return &Renderer{tmpl: tmpl, webDir: webDir, outDir: outDir, pdf: pdf}, nil
 }
 
 type Renderer struct {
 	tmpl   *template.Template
 	webDir string
 	outDir string
+	pdf    PDFRenderer
 }
 
 // Render writes the page to its per-locale output path.
@@ -62,6 +72,27 @@ func (r *Renderer) WriteLocaleJSON(locale string, raw []byte) error {
 	dst := filepath.Join(dir, locale+".json")
 	if err := os.WriteFile(dst, raw, 0o644); err != nil {
 		return fmt.Errorf("render: write %s.json: %w", locale, err)
+	}
+	return nil
+}
+
+// WritePDF generates the CV PDF for resume via the injected PDFRenderer and
+// writes it to the per-locale path ("en" → outDir/cv.pdf, others →
+// outDir/<lang>/cv.pdf), mirroring index.html. Generation and write failures are
+// wrapped distinctly; either fails the build, as PDF generation makes no external
+// call and so a failure is a defect, not a transient outage.
+func (r *Renderer) WritePDF(locale string, resume domain.Resume) error {
+	b, err := r.pdf.Render(resume)
+	if err != nil {
+		return fmt.Errorf("render: generate pdf for %s: %w", locale, err)
+	}
+	dir, err := r.localeDir(locale)
+	if err != nil {
+		return err
+	}
+	dst := filepath.Join(dir, "cv.pdf")
+	if err := os.WriteFile(dst, b, 0o644); err != nil {
+		return fmt.Errorf("render: write cv.pdf for %s: %w", locale, err)
 	}
 	return nil
 }
@@ -123,17 +154,26 @@ func (r *Renderer) WriteSitemap(allPages []dto.Page, siteURL string) error {
 	return nil
 }
 
+// localeDir returns the output directory for a locale, creating it: "en" lives at
+// outDir, every other locale under outDir/<lang>. It is the single home of the
+// per-locale path rule shared by the HTML and PDF writers.
+func (r *Renderer) localeDir(locale string) (string, error) {
+	dir := r.outDir
+	if locale != "en" {
+		dir = filepath.Join(r.outDir, locale)
+	}
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		return "", fmt.Errorf("render: create locale dir %s: %w", locale, err)
+	}
+	return dir, nil
+}
+
 // writeLocale renders the layout to the per-locale path: "en" → outDir/index.html,
 // others → outDir/<lang>/index.html.
 func (r *Renderer) writeLocale(page dto.Page) error {
-	var dir string
-	if page.Lang == "en" {
-		dir = r.outDir
-	} else {
-		dir = filepath.Join(r.outDir, page.Lang)
-		if err := os.MkdirAll(dir, 0o755); err != nil {
-			return fmt.Errorf("render: create locale dir %s: %w", page.Lang, err)
-		}
+	dir, err := r.localeDir(page.Lang)
+	if err != nil {
+		return err
 	}
 
 	f, err := os.Create(filepath.Join(dir, "index.html"))

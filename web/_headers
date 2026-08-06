@@ -18,3 +18,16 @@
 
 /content/*
   Cache-Control: public, max-age=31536000, immutable
+
+# The CV PDFs live at stable URLs (/cv.pdf, /<lang>/cv.pdf) but their content is
+# regenerated on every rebuild, so they must revalidate — an immutable one-year
+# cache would serve a stale CV to anyone who bookmarked or shared the link.
+# X-Robots-Tag: noindex keeps the HTML page the single indexed surface. No CSP
+# change is needed: opening a same-origin PDF via the download link is a top-level
+# navigation/download, not a fetch or embed governed by default-src.
+/cv.pdf
+  Cache-Control: public, max-age=3600, must-revalidate
+  X-Robots-Tag: noindex
+/*/cv.pdf
+  Cache-Control: public, max-age=3600, must-revalidate
+  X-Robots-Tag: noindex

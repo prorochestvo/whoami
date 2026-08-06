@@ -1,6 +1,7 @@
 package site_test
 
 import (
+	"bytes"
 	"context"
 	"io"
 	"log"
@@ -11,6 +12,7 @@ import (
 
 	"github.com/prorochestvo/whoami/internal/application/site"
 	"github.com/prorochestvo/whoami/internal/domain"
+	"github.com/prorochestvo/whoami/internal/infrastructure/pdf"
 	resumerepo "github.com/prorochestvo/whoami/internal/repository/resume"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -39,7 +41,7 @@ func buildIntegration(t *testing.T, locales []string, siteURL string) string {
 	tmpl := `{{define "layout"}}<html lang="{{.Lang}}">{{range .Alternates}}<link rel="alternate" hreflang="{{.Lang}}" href="{{.Href}}">{{end}}<title>{{.Title}}</title></html>{{end}}`
 	require.NoError(t, os.WriteFile(filepath.Join(tmplDir, "layout.html.tmpl"), []byte(tmpl), 0o644))
 
-	r, err := site.NewRenderer(tmplDir, webDir, outDir)
+	r, err := site.NewRenderer(tmplDir, webDir, outDir, pdf.New())
 	require.NoError(t, err)
 
 	logger := log.New(io.Discard, "", 0)
@@ -89,6 +91,14 @@ func TestIntegration_SingleLocale(t *testing.T) {
 		b, err := os.ReadFile(filepath.Join(outDir, "index.html"))
 		require.NoError(t, err)
 		assert.Contains(t, string(b), `lang="en"`)
+	})
+
+	t.Run("cv.pdf exists at root and is a valid PDF", func(t *testing.T) {
+		t.Parallel()
+		b, err := os.ReadFile(filepath.Join(outDir, "cv.pdf"))
+		require.NoError(t, err)
+		assert.True(t, bytes.HasPrefix(b, []byte("%PDF-")), "must start with the %%PDF- magic")
+		assert.Greater(t, len(b), 3*1024, "a real embedded-font CV is well over 3 KB")
 	})
 }
 
@@ -162,4 +172,33 @@ func TestIntegration_MultiLocale(t *testing.T) {
 			"qa locale content must contain PLACEHOLDER marker",
 		)
 	})
+
+	t.Run("a valid cv.pdf is emitted per locale, none in a build/en dir", func(t *testing.T) {
+		t.Parallel()
+		en, err := os.ReadFile(filepath.Join(outDir, "cv.pdf"))
+		require.NoError(t, err)
+		assert.True(t, bytes.HasPrefix(en, []byte("%PDF-")))
+
+		qa, err := os.ReadFile(filepath.Join(outDir, "qa", "cv.pdf"))
+		require.NoError(t, err)
+		assert.True(t, bytes.HasPrefix(qa, []byte("%PDF-")))
+		assert.NotEmpty(t, qa)
+
+		_, err = os.Stat(filepath.Join(outDir, "en", "cv.pdf"))
+		assert.True(t, os.IsNotExist(err), "the default locale must not create build/en/cv.pdf")
+	})
+}
+
+// TestIntegration_CyrillicLocale drives the real ru résumé through the real
+// pdf.New() end-to-end: a font or UTF-8 encoding regression would either fail
+// Build (surfaced by buildIntegration) or produce an invalid PDF, caught here.
+func TestIntegration_CyrillicLocale(t *testing.T) {
+	t.Parallel()
+
+	outDir := buildIntegration(t, []string{"en", "ru"}, "https://example.test/")
+
+	b, err := os.ReadFile(filepath.Join(outDir, "ru", "cv.pdf"))
+	require.NoError(t, err)
+	assert.True(t, bytes.HasPrefix(b, []byte("%PDF-")), "the ru CV must be a valid PDF")
+	assert.Greater(t, len(b), 3*1024, "the real ru CV embeds fonts and is well over 3 KB")
 }

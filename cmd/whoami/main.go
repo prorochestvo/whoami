@@ -12,6 +12,7 @@ import (
 
 	"github.com/prorochestvo/whoami/internal/application/site"
 	"github.com/prorochestvo/whoami/internal/infrastructure/github"
+	"github.com/prorochestvo/whoami/internal/infrastructure/pdf"
 	resumerepo "github.com/prorochestvo/whoami/internal/repository/resume"
 )
 
@@ -42,7 +43,7 @@ func main() {
 		logger.Fatalf("default locale 'en' failed to load: %v", err)
 	}
 
-	renderer, err := site.NewRenderer("templates", "web", "build")
+	renderer, err := site.NewRenderer("templates", "web", "build", pdf.New())
 	if err != nil {
 		logger.Fatalf("init renderer: %v", err)
 	}

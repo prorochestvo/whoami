@@ -81,6 +81,10 @@ func (b *Builder) Build(ctx context.Context) error {
 			return fmt.Errorf("build: write json for locale %s: %w", locale, err)
 		}
 
+		if err := b.renderer.WritePDF(locale, resume); err != nil {
+			return fmt.Errorf("build: write pdf for locale %s: %w", locale, err)
+		}
+
 		renderedPages = append(renderedPages, page)
 	}
 

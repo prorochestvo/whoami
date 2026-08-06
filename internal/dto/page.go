@@ -5,6 +5,7 @@ package dto
 import (
 	"strings"
 	"time"
+	"unicode"
 
 	"github.com/prorochestvo/whoami/internal/domain"
 )
@@ -42,6 +43,13 @@ type Page struct {
 	LocaleName  string
 	Alternates  []Alternate
 	LocaleLinks []LocaleLink
+
+	// PDFHref is the root-relative URL of the per-locale CV PDF ("/cv.pdf" for
+	// en, "/<lang>/cv.pdf" otherwise), matching how the template references other
+	// root-relative assets. PDFDownloadName is the ASCII save-name for the
+	// anchor's download attribute.
+	PDFHref         string
+	PDFDownloadName string
 }
 
 // NewPage builds the view model for one locale. siteURL's trailing slash is
@@ -87,6 +95,9 @@ func NewPage(r domain.Resume, s domain.GitHubStats, siteURL, lang string, allLoc
 		LocaleName:   localeName(allLocales, lang),
 		Alternates:   alternates,
 		LocaleLinks:  links,
+
+		PDFHref:         pdfHref(lang),
+		PDFDownloadName: pdfDownloadName(r.Person.Name, lang),
 	}
 }
 
@@ -107,4 +118,52 @@ func localeName(locales []LocaleMeta, code string) string {
 		}
 	}
 	return code
+}
+
+// pdfHref returns the root-relative CV PDF URL for a locale, mirroring the HTML
+// convention: "en" at the root, every other locale under its own path prefix.
+func pdfHref(lang string) string {
+	if lang == "en" {
+		return "/cv.pdf"
+	}
+	return "/" + lang + "/cv.pdf"
+}
+
+// pdfDownloadName derives the anchor's ASCII save-name from the person's name:
+// an ASCII slug suffixed "-CV" (and "-<lang>" for non-en). A name that strips to
+// nothing (e.g. the Cyrillic ru name) falls back to "CV-<lang>.pdf" so the
+// download attribute never carries a non-ASCII, cross-platform-unsafe filename.
+func pdfDownloadName(name, lang string) string {
+	slug := asciiSlug(name)
+	if slug == "" {
+		return "CV-" + lang + ".pdf"
+	}
+	if lang == "en" {
+		return slug + "-CV.pdf"
+	}
+	return slug + "-CV-" + lang + ".pdf"
+}
+
+// asciiSlug keeps ASCII letters and digits, treats whitespace as a token break
+// joined by single hyphens, and drops every other rune (punctuation, non-ASCII)
+// without splitting. It returns "" when nothing ASCII-alphanumeric survives.
+func asciiSlug(s string) string {
+	var tokens []string
+	var cur strings.Builder
+	flush := func() {
+		if cur.Len() > 0 {
+			tokens = append(tokens, cur.String())
+			cur.Reset()
+		}
+	}
+	for _, r := range s {
+		switch {
+		case (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9'):
+			cur.WriteRune(r)
+		case unicode.IsSpace(r):
+			flush()
+		}
+	}
+	flush()
+	return strings.Join(tokens, "-")
 }

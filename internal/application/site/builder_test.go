@@ -16,6 +16,21 @@ import (
 
 var _ StatsFetcher = (*fakeFetcher)(nil)
 var _ ContentSource = (*fakeContent)(nil)
+var _ PDFRenderer = (*fakePDF)(nil)
+
+// sentinelPDF is the fixed byte string the fake PDFRenderer returns so tests can
+// assert exactly which bytes landed at each per-locale path.
+var sentinelPDF = []byte("%PDF-1.7\nsentinel-cv\n%%EOF\n")
+
+// fakePDF is a stub PDFRenderer returning fixed bytes or a fixed error.
+type fakePDF struct {
+	out []byte
+	err error
+}
+
+func (f *fakePDF) Render(domain.Resume) ([]byte, error) {
+	return f.out, f.err
+}
 
 type fakeFetcher struct {
 	stats domain.GitHubStats
@@ -70,6 +85,11 @@ func (f *fakeContent) Raw(locale string) ([]byte, error) {
 
 func newTestRenderer(t *testing.T) (*Renderer, string) {
 	t.Helper()
+	return newTestRendererWith(t, &fakePDF{out: sentinelPDF})
+}
+
+func newTestRendererWith(t *testing.T, pdf PDFRenderer) (*Renderer, string) {
+	t.Helper()
 	dir := t.TempDir()
 	tmplDir := filepath.Join(dir, "templates")
 	webDir := filepath.Join(dir, "web")
@@ -79,7 +99,7 @@ func newTestRenderer(t *testing.T) (*Renderer, string) {
 	tmpl := `{{define "layout"}}{{.Resume.Person.Name}}|{{.Lang}}|{{if .GitHub.Available}}STATS:{{.GitHub.PublicRepos}}{{else}}NOSTATS{{end}}{{end}}`
 	require.NoError(t, os.WriteFile(filepath.Join(tmplDir, "layout.html.tmpl"), []byte(tmpl), 0o644))
 
-	r, err := NewRenderer(tmplDir, webDir, outDir)
+	r, err := NewRenderer(tmplDir, webDir, outDir, pdf)
 	require.NoError(t, err)
 	return r, outDir
 }
@@ -184,6 +204,27 @@ func TestBuilder_Build(t *testing.T) {
 		// sentinel must be in outDir (assets copied exactly once)
 		_, err = os.Stat(filepath.Join(outDir, "sentinel.txt"))
 		require.NoError(t, err, "sentinel asset must be present in output")
+	})
+
+	t.Run("writes cv.pdf per locale via the PDF renderer", func(t *testing.T) {
+		t.Parallel()
+		r, outDir := newTestRenderer(t)
+		content := newFakeContent("en", "qa")
+		f := fakeFetcher{}
+
+		err := NewBuilder(content, f, r, []string{"en", "qa"}, "https://example.test/", logger).Build(context.Background())
+		require.NoError(t, err)
+
+		en, err := os.ReadFile(filepath.Join(outDir, "cv.pdf"))
+		require.NoError(t, err)
+		assert.Equal(t, sentinelPDF, en, "en cv.pdf lands at the root with the sentinel bytes")
+
+		qa, err := os.ReadFile(filepath.Join(outDir, "qa", "cv.pdf"))
+		require.NoError(t, err)
+		assert.Equal(t, sentinelPDF, qa, "qa cv.pdf lands under its locale dir")
+
+		_, err = os.Stat(filepath.Join(outDir, "en", "cv.pdf"))
+		assert.True(t, os.IsNotExist(err), "no build/en/cv.pdf for the default locale")
 	})
 
 	t.Run("no build/en directory created for default locale", func(t *testing.T) {

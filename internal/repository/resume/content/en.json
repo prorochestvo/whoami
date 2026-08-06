@@ -180,10 +180,10 @@
       "name": "VPNTunnel",
       "repo": "github.com/prorochestvo/vpntunnel",
       "url": "https://github.com/prorochestvo/vpntunnel",
-      "stack": ["Go", "WireGuard (userspace)", "gVisor netstack"],
+      "stack": ["Go", "WireGuard (userspace)"],
       "summary": "Forward HTTP proxy routing all egress through a bearer-authenticated WireGuard tunnel — no root, no kernel modules.",
       "highlights": [
-        "Userspace networking via gVisor netstack; HTTP forward and HTTPS CONNECT in one static binary.",
+        "Userspace networking; HTTP forward and HTTPS CONNECT in one static binary.",
         "Constant-time token authentication."
       ]
     },

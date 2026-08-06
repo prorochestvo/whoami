@@ -96,4 +96,30 @@ func TestNewPage(t *testing.T) {
 			}
 		}
 	})
+
+	t.Run("PDF href is root-relative and per-locale", func(t *testing.T) {
+		t.Parallel()
+		en := NewPage(resume, domain.GitHubStats{}, "https://example.test/", "en", singleLocale, at)
+		assert.Equal(t, "/cv.pdf", en.PDFHref)
+		de := NewPage(resume, domain.GitHubStats{}, "https://example.test/", "de", twoLocales, at)
+		assert.Equal(t, "/de/cv.pdf", de.PDFHref)
+	})
+
+	t.Run("PDF download name is an ASCII slug suffixed per locale", func(t *testing.T) {
+		t.Parallel()
+		latin := domain.Resume{Person: domain.Person{Name: "Seilbek Skindirov"}}
+		en := NewPage(latin, domain.GitHubStats{}, "https://example.test/", "en", singleLocale, at)
+		assert.Equal(t, "Seilbek-Skindirov-CV.pdf", en.PDFDownloadName)
+		de := NewPage(latin, domain.GitHubStats{}, "https://example.test/", "de", twoLocales, at)
+		assert.Equal(t, "Seilbek-Skindirov-CV-de.pdf", de.PDFDownloadName)
+	})
+
+	t.Run("PDF download name falls back to ASCII for a non-ASCII name", func(t *testing.T) {
+		t.Parallel()
+		cyrillic := domain.Resume{Person: domain.Person{Name: "Сейльбек Скиндиров"}}
+		locales := []LocaleMeta{{Code: "en", Name: "English"}, {Code: "ru", Name: "Русский"}}
+		p := NewPage(cyrillic, domain.GitHubStats{}, "https://example.test/", "ru", locales, at)
+		assert.Equal(t, "/ru/cv.pdf", p.PDFHref)
+		assert.Equal(t, "CV-ru.pdf", p.PDFDownloadName)
+	})
 }
