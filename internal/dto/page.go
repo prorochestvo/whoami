@@ -3,6 +3,8 @@
 package dto
 
 import (
+	"encoding/json"
+	"html/template"
 	"strings"
 	"time"
 	"unicode"
@@ -37,7 +39,22 @@ type Page struct {
 	Title        string
 	Description  string
 	CanonicalURL string
-	OGImage      string
+
+	OGImage       string
+	OGImageAlt    string
+	OGImageWidth  int
+	OGImageHeight int
+
+	// OGLocale is this page's OpenGraph locale ("" when the code is unmapped);
+	// OGLocaleAlternates holds the OG locales of the other mapped, built locales.
+	OGLocale           string
+	OGLocaleAlternates []string
+
+	// PersonLD is a ready-to-emit <script type="application/ld+json"> block of
+	// schema.org Person data, built by buildPersonLD. It is template.HTML because
+	// the payload is first-party résumé data already HTML-escaped by json.Marshal;
+	// see buildPersonLD for the injection-safety rationale.
+	PersonLD template.HTML
 
 	Lang        string
 	LocaleName  string
@@ -82,6 +99,16 @@ func NewPage(r domain.Resume, s domain.GitHubStats, siteURL, lang string, allLoc
 		}
 	}
 
+	// PersonLD is a progressive enhancement: json.Marshal of a struct of strings
+	// cannot fail in practice (invalid UTF-8 is replaced, not errored), and the
+	// block's absence must never fail the build — so a marshal error degrades to an
+	// empty block rather than forcing a (Page, error) signature onto every caller.
+	personImage := siteURL + "img/avatar/site-transparent-512.png"
+	personLD, err := buildPersonLD(r.Person.Name, r.Person.Title, canonical, personImage, profileURLs(r.Contacts))
+	if err != nil {
+		personLD = ""
+	}
+
 	return Page{
 		Resume:       r,
 		GitHub:       s,
@@ -90,15 +117,39 @@ func NewPage(r domain.Resume, s domain.GitHubStats, siteURL, lang string, allLoc
 		Title:        r.Person.Name + " — " + r.Person.Title,
 		Description:  r.Person.Tagline,
 		CanonicalURL: canonical,
-		OGImage:      siteURL + "img/og.png",
-		Lang:         lang,
-		LocaleName:   localeName(allLocales, lang),
-		Alternates:   alternates,
-		LocaleLinks:  links,
+
+		OGImage:       siteURL + "img/og.png",
+		OGImageAlt:    r.Person.Name + " — " + r.Person.Title,
+		OGImageWidth:  ogImageWidth,
+		OGImageHeight: ogImageHeight,
+
+		OGLocale:           ogLocale(lang),
+		OGLocaleAlternates: ogLocaleAlternates(lang, allLocales),
+		PersonLD:           personLD,
+
+		Lang:        lang,
+		LocaleName:  localeName(allLocales, lang),
+		Alternates:  alternates,
+		LocaleLinks: links,
 
 		PDFHref:         pdfHref(lang),
 		PDFDownloadName: pdfDownloadName(r.Person.Name, lang),
 	}
+}
+
+// ogImageWidth and ogImageHeight are the fixed pixel dimensions of the committed
+// og.png card; naming them here keeps every og:image:* value in one place.
+const (
+	ogImageWidth  = 1200
+	ogImageHeight = 630
+)
+
+// ogLocaleByLang maps a content locale code to its OpenGraph locale. A code with
+// no entry (the qa test placeholder, or any future unmapped locale) yields "",
+// so the page omits its own og:locale and is skipped as an alternate elsewhere.
+var ogLocaleByLang = map[string]string{
+	"en": "en_US",
+	"ru": "ru_RU",
 }
 
 // localeURL returns the absolute URL for a locale; "en" lives at the bare siteURL
@@ -118,6 +169,76 @@ func localeName(locales []LocaleMeta, code string) string {
 		}
 	}
 	return code
+}
+
+// ogLocale returns the OpenGraph locale for a content code, or "" when the code
+// has no mapping.
+func ogLocale(lang string) string {
+	return ogLocaleByLang[lang]
+}
+
+// ogLocaleAlternates returns the OG locales of every built locale other than
+// current, in order, skipping the current locale and any unmapped code so a page
+// never emits an og:locale:alternate for itself or for an unmapped placeholder.
+func ogLocaleAlternates(current string, all []LocaleMeta) []string {
+	var out []string
+	for _, m := range all {
+		if m.Code == current {
+			continue
+		}
+		if loc := ogLocale(m.Code); loc != "" {
+			out = append(out, loc)
+		}
+	}
+	return out
+}
+
+// profileURLs collects the absolute http(s) contact URLs in order, for the
+// schema.org Person sameAs list. Keeping the derivation in the data (rather than
+// hardcoding profile links) drops mailto: and URL-less contacts and makes adding
+// a profile a content-only change.
+func profileURLs(contacts []domain.Contact) []string {
+	var out []string
+	for _, c := range contacts {
+		if strings.HasPrefix(c.URL, "https://") || strings.HasPrefix(c.URL, "http://") {
+			out = append(out, c.URL)
+		}
+	}
+	return out
+}
+
+// buildPersonLD renders a schema.org Person as a ready-to-emit ld+json script.
+// Injection safety rests on two independent guards: (1) json.Marshal escapes '<',
+// '>' and '&' to U+003C, U+003E and U+0026 (and U+2028/U+2029), so no value can
+// emit a literal "</script>" that terminates the element; (2) the <script>
+// wrapper is a static literal, never assembled from résumé data. The result is
+// template.HTML because the payload is first-party data already HTML-escaped by
+// json.Marshal — not raw external input — so this is not a bypass on external
+// data. Do not switch to a json.Encoder with SetEscapeHTML(false): that removes
+// guard #1. image and url must be absolute, as schema.org requires.
+func buildPersonLD(name, jobTitle, url, image string, sameAs []string) (template.HTML, error) {
+	doc := struct {
+		Context  string   `json:"@context"`
+		Type     string   `json:"@type"`
+		Name     string   `json:"name"`
+		JobTitle string   `json:"jobTitle"`
+		URL      string   `json:"url"`
+		Image    string   `json:"image"`
+		SameAs   []string `json:"sameAs,omitempty"`
+	}{
+		Context:  "https://schema.org",
+		Type:     "Person",
+		Name:     name,
+		JobTitle: jobTitle,
+		URL:      url,
+		Image:    image,
+		SameAs:   sameAs,
+	}
+	b, err := json.Marshal(doc)
+	if err != nil {
+		return "", err
+	}
+	return template.HTML(`<script type="application/ld+json">` + string(b) + `</script>`), nil
 }
 
 // pdfHref returns the root-relative CV PDF URL for a locale, mirroring the HTML
