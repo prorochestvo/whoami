@@ -48,6 +48,7 @@
   <div class="progress-bar" role="progressbar" aria-label="Loading" aria-hidden="true"></div>
   {{ template "content" . }}
   <script src="/js/main.js?v={{ .GeneratedAt.Unix }}" defer></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "4c14821d6d6c40b9b7ff535b2c916441"}'></script>
 </body>
 </html>
 {{- end -}}
