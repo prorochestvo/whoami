@@ -22,13 +22,20 @@ Pure Go, `CGO_ENABLED=0`. The generator produces the deployed artifact under `bu
 make build    # CGO_ENABLED=0; generator -> build/
 make run      # build, then serve build/ locally
 make test     # go fmt + vet + test ./...
+make lint     # golangci-lint over the whole tree + scripts/lint-checks.sh
+make lint-new # lint only code newer than LINT_BASE; this is the gate
 make format   # go fmt ./...
 make clean    # rm build/ + go mod tidy
 ```
 
 Targeted runs: `CGO_ENABLED=0 go test -run 'TestName[/subtest_name]' ./internal/...` (add `-v` for a single package).
 
-Do not invent `make` targets beyond the five above.
+`make lint` is expected to be red: it reports the standing findings that predate
+the linter, tracked as sub-issues of the adoption issue. `make lint-new` is the
+one that must stay green — new code is held to the full configuration while the
+backlog is cleared by class. Never silence a finding to make `lint-new` pass.
+
+Do not invent `make` targets beyond the seven above.
 
 ## Architecture Overview
 
@@ -113,8 +120,9 @@ All non-trivial work follows the plan-first pipeline:
    Lenses A (correctness & tests) and C (performance & architecture) are standard.
    Full three-lens fan-out is mandatory on the first review; the post-fix re-review
    is ONE solo reviewer scoped to the changed lines.
-4. **Gate** — `make test` (and `make build` for generator/template changes) must be
-   green before review; a red tree goes to the `testdoctor` agent first.
+4. **Gate** — `make test` and `make lint-new` (plus `make build` for generator or
+   template changes) must be green before review; a red tree goes to the
+   `testdoctor` agent first.
 5. **Complete** — the orchestrator merges the three reports, deduplicates, resolves
    conflicting verdicts (naming what was rejected and why; the user has final say).
    P0/P1 findings loop back to the engineer. Only when every P0/P1 is fixed or
