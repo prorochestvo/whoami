@@ -1,7 +1,5 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
 > **Status: scaffolding in progress** — sections describe the agreed shape (stack, structure, deploy, conventions); not every file exists yet. Keep this file in sync as code lands.
 
 ## What this is
@@ -31,9 +29,10 @@ make clean    # rm build/ + go mod tidy
 Targeted runs: `CGO_ENABLED=0 go test -run 'TestName[/subtest_name]' ./internal/...` (add `-v` for a single package).
 
 `make lint` is expected to be red: it reports the standing findings that predate
-the linter, tracked as sub-issues of the adoption issue. `make lint-new` is the
-one that must stay green — new code is held to the full configuration while the
-backlog is cleared by class. Never silence a finding to make `lint-new` pass.
+the linter, tracked as sub-issues of the adoption issue. `make lint-new` (baseline
+`LINT_BASE`, default `origin/main`) is the one that must stay green. Never silence a
+finding to make it pass. The `.golangci.yml` / `gorules/` / `scripts/lint-checks.sh`
+tiering and the baseline convention itself come from the `stack-go:lint` skill.
 
 Do not invent `make` targets beyond the seven above.
 
@@ -90,9 +89,10 @@ GitHub Actions is the primary path (self-contained, pins its own Go version): `c
 - **Auto-escaping.** All injected GitHub / API data flows through `html/template`'s
   contextual auto-escaping. Do not bypass it (`template.HTML` etc.) for external data.
 - **Secrets via env only.** Never read or edit `.env`.
-- **Go and generic conventions** (style, declaration order, test structure, godoc,
-  error discipline, code organization) come from the `stack-go` plugin skills — not
-  restated here.
+
+Generic Go conventions (style, declaration order, test structure, godoc, error discipline,
+build hygiene, organisation) come from the `stack-go` plugin skills and are not restated
+anywhere in this repo.
 
 ## Constraints
 
@@ -106,27 +106,13 @@ GitHub Actions is the primary path (self-contained, pins its own Go version): `c
 
 ## Working agreement
 
-All non-trivial work follows the plan-first pipeline:
+Plan-first pipeline; the canonical procedure is the `pipeline:working-agreement` skill — load it
+before starting non-trivial work. Project delta:
 
-1. **Plan** — the `architect` agent writes `plans/NNN-slug.md` (create via the
-   `pipeline:new-plan` skill). No source edits before a plan exists.
-2. **Implement** — the `engineer` agent executes the plan's tasks with tests.
-3. **Review** — three `reviewer` agents launched in parallel in ONE message, each
-   prompt naming its lens and the changed files. **Project lens override — lens B is
-   SEO, accessibility & security**: presence/correctness of `<title>`, meta
-   description, canonical URL, OG + Twitter tags; semantic structure and heading
-   hierarchy; `alt` text; content readable with JS disabled; no auto-escaping bypass
-   (`template.HTML`) on external data; `_headers` (CSP) and `robots.txt` sanity.
-   Lenses A (correctness & tests) and C (performance & architecture) are standard.
-   Full three-lens fan-out is mandatory on the first review; the post-fix re-review
-   is ONE solo reviewer scoped to the changed lines.
-4. **Gate** — `make test` and `make lint-new` (plus `make build` for generator or
-   template changes) must be green before review; a red tree goes to the
-   `testdoctor` agent first.
-5. **Complete** — the orchestrator merges the three reports, deduplicates, resolves
-   conflicting verdicts (naming what was rejected and why; the user has final say).
-   P0/P1 findings loop back to the engineer. Only when every P0/P1 is fixed or
-   explicitly accepted: move the plan via the `pipeline:complete-plan` skill.
-
-Plans live in `plans/` (active), `plans/completed/` (shipped, `YYMMDD.NNNN.slug.md`),
-`plans/history/` (abandoned/superseded). One plan per concern.
+- **Gate:** `make test && make lint-new`, plus `make build` for generator or template changes.
+- **Lenses:** override — **lens B is SEO, accessibility & security**: presence/correctness of
+  `<title>`, meta description, canonical URL, OG + Twitter tags; semantic structure and heading
+  hierarchy; `alt` text; content readable with JS disabled; no auto-escaping bypass
+  (`template.HTML`) on external data; `_headers` (CSP) and `robots.txt` sanity. Lenses A
+  (correctness & tests) and C (performance & architecture) are standard.
+- **Branching:** standard (`type/<issue>-<slug>`, PR into `main`).
