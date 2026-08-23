@@ -114,5 +114,5 @@ before starting non-trivial work. Project delta:
   `<title>`, meta description, canonical URL, OG + Twitter tags; semantic structure and heading
   hierarchy; `alt` text; content readable with JS disabled; no auto-escaping bypass
   (`template.HTML`) on external data; `_headers` (CSP) and `robots.txt` sanity. Lenses A
-  (correctness & tests) and C (performance & architecture) are standard.
+  (correctness & tests), C (performance & architecture) and O (owner standards) are standard.
 - **Branching:** standard (`type/<issue>-<slug>`, PR into `main`).
