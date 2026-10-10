@@ -14,5 +14,5 @@
 # Claude Code: commit settings, skills, and agent memory
 .claude/*
 !.claude/settings.json
-!.claude/skills/
+!.claude/skills
 !.claude/agent-memory/
