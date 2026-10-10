@@ -1,3 +1,3 @@
 # Memory Index
 
-- [i18n Architecture](project_i18n_architecture.md) — JSON content + locale loop decisions locked in plans/001
+- [i18n Architecture](project_i18n_architecture.md) — JSON content + locale loop decisions locked in .agents/plans/001

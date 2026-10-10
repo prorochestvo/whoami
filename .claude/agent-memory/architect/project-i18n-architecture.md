@@ -7,7 +7,7 @@ metadata:
 
 The whoami site is being moved from hardcoded Go résumé content to per-locale JSON as the
 single source of truth, with SEO-safe per-locale pre-rendered pages and a
-progressive-enhancement language switcher. Plan: `plans/001-json-i18n-content-and-language-switcher.md`.
+progressive-enhancement language switcher. Plan: `.agents/plans/001-json-i18n-content-and-language-switcher.md`.
 
 **Why:** owner wants i18n-ready content and a client-side language switcher (fetch + CSS
 progress bar) without sacrificing SEO. Architecture was decided by the user, not open for

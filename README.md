@@ -69,7 +69,7 @@ The layout is a DDD-style split (mirroring the `beacon` project):
 | `templates/*.tmpl`                  | `html/template` sources (`layout` + `content`).                            |
 | `web/`                              | Static source assets: `css/`, `js/`, `fonts/`, `img/`, `robots.txt`, `_headers`. |
 | `build/`                            | Generated output (gitignored); Cloudflare Pages output directory.          |
-| `plans/`                            | Markdown task plans (active → `completed/` → `history/`).                  |
+| `.agents/plans/`                            | Markdown task plans (active → `completed/` → `history/`).                  |
 
 - Module: `github.com/prorochestvo/whoami`
 - Go: 1.26
