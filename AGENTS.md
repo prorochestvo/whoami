@@ -110,9 +110,10 @@ Plan-first pipeline; the canonical procedure is the `pipeline:working-agreement`
 before starting non-trivial work. Project delta:
 
 - **Gate:** `make test && make lint-new`, plus `make build` for generator or template changes.
-- **Lenses:** override — **lens B is SEO, accessibility & security**: presence/correctness of
-  `<title>`, meta description, canonical URL, OG + Twitter tags; semantic structure and heading
-  hierarchy; `alt` text; content readable with JS disabled; no auto-escaping bypass
-  (`template.HTML`) on external data; `_headers` (CSP) and `robots.txt` sanity. Lenses A
-  (correctness & tests), C (performance & architecture) and O (owner standards) are standard.
+- **Review focus:** override — **the security and operations reviewer covers SEO,
+  accessibility & security**: presence/correctness of `<title>`, meta description, canonical
+  URL, OG + Twitter tags; semantic structure and heading hierarchy; `alt` text; content
+  readable with JS disabled; no auto-escaping bypass (`template.HTML`) on external data;
+  `_headers` (CSP) and `robots.txt` sanity. The correctness and tests and the architecture
+  and performance reviewers, and the standards audit, are standard.
 - **Branching:** standard (`type/<issue>-<slug>`, PR into `main`).
